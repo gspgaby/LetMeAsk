@@ -33,16 +33,17 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - [Firebase]
 - [TypeScript]
 
-## 🚀 Como executar
+## 🚀 Pré-requisitos necessários para a utilização da Aplicação
 
-Clone o projeto e acesse a pasta do mesmo.
+- Instale NodeJS em seu computador.
+- Clone o projeto e acesse a pasta do mesmo.
 
 ```sh
 $ git clone https://github.com/gspgaby/LetMeAsk
 $ cd LetMeAsk
 ```
 
-Para iniciá-lo, siga os passos abaixo:
+- Para iniciá-lo, siga os passos abaixo:
 
 - Instale as dependências
 
