@@ -1,6 +1,6 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { useParams } from "react-router-dom";
-import logo from "../assets/images/logo.svg";
+import logoImg from "../assets/images/logo.svg";
 import { Button } from "../components/Button";
 import { RoomCode } from "../components/RoomCode";
 import { useAuth } from "../hooks/useAuth";
@@ -29,7 +29,7 @@ export function Room() {
     }
 
     if (!user) {
-      throw new Error("You most be logged in");
+      throw new Error("You must be logged in");
     }
 
     const question = {
@@ -38,7 +38,7 @@ export function Room() {
         name: user.name,
         avatar: user.avatar,
       },
-      isHighLighted: false,
+      isHighlighted: false,
       isAnswered: false,
     };
 
@@ -52,7 +52,6 @@ export function Room() {
     likeId: string | undefined
   ) {
     if (likeId) {
-      //remover
       await database
         .ref(`rooms/${roomId}/questions/${questionId}/likes/${likeId}`)
         .remove();
@@ -67,50 +66,52 @@ export function Room() {
     <div id="page-room">
       <header>
         <div className="content">
-          <img src={logo} alt="Letmeask" />
+          <img src={logoImg} alt="Letmeask" />
           <RoomCode code={roomId} />
         </div>
       </header>
 
-      <div className="center">
-        <main>
-          <div className="room-title">
-            <h1>Sala {title}</h1>
-            {questions.length && <span>{questions.length} pergunta(s) </span>}
+      <main>
+        <div className="room-title">
+          <h1>Sala {title}</h1>
+          {questions.length > 0 && <span>{questions.length} pergunta(s)</span>}
+        </div>
+
+        <form onSubmit={handleSendQuestion}>
+          <textarea
+            placeholder="O que você quer perguntar?"
+            onChange={(event) => setNewQuestion(event.target.value)}
+            value={newQuestion}
+          />
+
+          <div className="form-footer">
+            {user ? (
+              <div className="user-info">
+                <img src={user.avatar} alt={user.name} />
+                <span>{user.name}</span>
+              </div>
+            ) : (
+              <span>
+                Para enviar uma pergunta, <button>faça seu login</button>.
+              </span>
+            )}
+            <Button type="submit" disabled={!user}>
+              Enviar pergunta
+            </Button>
           </div>
+        </form>
 
-          <form onSubmit={handleSendQuestion}>
-            <textarea
-              placeholder="O que você quer perguntar?"
-              onChange={(event) => setNewQuestion(event.target.value)}
-              value={newQuestion}
-            />
-
-            <div className="div form-footer">
-              {user ? (
-                <div className="user-info">
-                  <img src={user.avatar} alt={user.name} />
-                  <span>{user.name}</span>
-                </div>
-              ) : (
-                <span>
-                  Para enviar uma pergunta, <button>faça seu login.</button>
-                </span>
-              )}
-              <Button type="submit" disabled={!user}>
-                Enviar pergunta
-              </Button>
-            </div>
-          </form>
-
-          <div className="question-list">
-            {questions.map((question) => {
-              return (
-                <Question
-                  key={question.id}
-                  content={question.content}
-                  author={question.author}
-                >
+        <div className="question-list">
+          {questions.map((question) => {
+            return (
+              <Question
+                key={question.id}
+                content={question.content}
+                author={question.author}
+                isAnswered={question.isAnswered}
+                isHighlighted={question.isHighlighted}
+              >
+                {!question.isAnswered && (
                   <button
                     className={`like-button ${question.likeId ? "liked" : ""}`}
                     type="button"
@@ -138,12 +139,12 @@ export function Room() {
                       />
                     </svg>
                   </button>
-                </Question>
-              );
-            })}
-          </div>
-        </main>
-      </div>
+                )}
+              </Question>
+            );
+          })}
+        </div>
+      </main>
     </div>
   );
 }
