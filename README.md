@@ -47,10 +47,22 @@ Para iniciá-lo, siga os passos abaixo:
 - Instale as dependências
 
 ```sh
+npm install
+```
+
+ou
+
+```sh
 $ yarn install
 ```
 
 - Inicie o projeto
+
+```sh
+npm start
+```
+
+ou
 
 ```sh
   $ yarn start
